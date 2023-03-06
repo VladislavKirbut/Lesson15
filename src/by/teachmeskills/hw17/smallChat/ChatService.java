@@ -1,4 +1,4 @@
-package by.teachmeskills.hw17;
+package by.teachmeskills.hw17.smallChat;
 
 import java.time.Duration;
 import java.time.Instant;
