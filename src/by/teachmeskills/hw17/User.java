@@ -1,18 +1,18 @@
 package by.teachmeskills.hw17;
 
 public class User {
-    private final String userName;
+    private final String nickname;
 
-    public User (String userName) {
-        if(!isUserNameCorrect(userName))
-            throw new IllegalArgumentException("User name is incorrect.");
-
-        this.userName = userName;
+    public User(String userName) {
+        this.nickname = userName;
     }
 
-    private boolean isUserNameCorrect(String userName) {
-        if (userName == null) throw new IllegalArgumentException("Enter correct name.");
-
-        return userName.matches("[A-Za-z]+");
+    public String getNickname() {
+        return nickname;
     }
+
+    public String toString() {
+        return "@%s".formatted(nickname);
+    }
+
 }
