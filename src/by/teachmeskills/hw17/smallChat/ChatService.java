@@ -1,5 +1,6 @@
 package by.teachmeskills.hw17.smallChat;
 
+import javax.swing.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
@@ -11,15 +12,14 @@ public class ChatService {
     private Message[] messageList = new Message[0];
 
     public ChatService(Duration timeInterval, int countOfMessage) {
-        if (!isCountOfMessageCorrect(countOfMessage))
+        if (countOfMessage < 0)
             throw new IllegalArgumentException("Count of message is negative or zero.");
+
+        if (timeInterval.isNegative() || timeInterval.isZero())
+            throw new IllegalArgumentException("Time interval is negative or zero.");
 
         this.timeInterval = timeInterval;
         this.countOfMessage = countOfMessage;
-    }
-
-    private boolean isCountOfMessageCorrect(int countOfMessage) {
-        return countOfMessage > 0;
     }
 
     public Message[] getMessageList() {
@@ -27,24 +27,27 @@ public class ChatService {
     }
 
     public boolean addMessage(User author, String textMessage) {
-        if (!isMessageCreate(author))
+        Instant createdInstant = Instant.now();
+        if (!isMessageCreate(author, createdInstant))
             return false;
 
-        Message message = new Message(author, textMessage);
+        Message message = new Message(author, textMessage, createdInstant);
         saveMessage(message);
         return true;
     }
 
-    private boolean isMessageCreate(User author) {
+    private boolean isMessageCreate(User author, Instant createdInstant) {
         int countOfMessage = 0;
 
-        Instant finish = Instant.now();
-        Instant start = finish.minus(timeInterval);
+        Instant start = createdInstant.minus(timeInterval);
 
         for (int i = messageList.length - 1; i >= 0; i--) {
             if (messageList[i].getAuthor().equals(author)
                     && messageList[i].getCreatedInstant().isAfter(start)) {
                 countOfMessage++;
+
+                if (messageList[i].getCreatedInstant().isBefore(start))
+                    return true;
 
                 if (countOfMessage == this.countOfMessage) return false;
             }
