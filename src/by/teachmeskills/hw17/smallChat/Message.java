@@ -8,10 +8,10 @@ public class Message {
     private final String textMessage;
     private final Instant createdInstant;
 
-    public Message(User author, String textMessage) {
+    public Message(User author, String textMessage, Instant createdInstant) {
         this.author = author;
         this.textMessage = textMessage;
-        this.createdInstant = Instant.now();
+        this.createdInstant = createdInstant;
     }
 
     public Instant getCreatedInstant() {
