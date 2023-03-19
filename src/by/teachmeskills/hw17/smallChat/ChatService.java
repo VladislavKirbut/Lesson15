@@ -26,17 +26,15 @@ public class ChatService {
         return Arrays.copyOf(messageList, messageList.length);
     }
 
-    public boolean addMessage(User author, String textMessage) {
+    public void addMessage(User author, String textMessage) throws CountOfMessagesExceededException {
         Instant createdInstant = Instant.now();
-        if (!isMessageCreate(author, createdInstant))
-            return false;
-
-        Message message = new Message(author, textMessage, createdInstant);
-        saveMessage(message);
-        return true;
+        if (isMessageCreate(author, createdInstant)) {
+            Message message = new Message(author, textMessage, createdInstant);
+            saveMessage(message);
+        }
     }
 
-    private boolean isMessageCreate(User author, Instant createdInstant) {
+    private boolean isMessageCreate(User author, Instant createdInstant) throws CountOfMessagesExceededException {
         int countOfMessage = 0;
 
         Instant start = createdInstant.minus(timeInterval);
@@ -49,7 +47,8 @@ public class ChatService {
                 if (messageList[i].getCreatedInstant().isBefore(start))
                     return true;
 
-                if (countOfMessage == this.countOfMessage) return false;
+                if (countOfMessage == this.countOfMessage)
+                    throw new CountOfMessagesExceededException(Duration.between(start, messageList[i].getCreatedInstant()));
             }
         }
 

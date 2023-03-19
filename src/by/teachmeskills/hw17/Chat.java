@@ -1,6 +1,7 @@
 package by.teachmeskills.hw17;
 
 import by.teachmeskills.hw17.smallChat.ChatService;
+import by.teachmeskills.hw17.smallChat.CountOfMessagesExceededException;
 import by.teachmeskills.hw17.smallChat.Message;
 import by.teachmeskills.hw17.smallChat.User;
 
@@ -25,9 +26,12 @@ public class Chat {
                 printAll(messageList);
             } else if (input.matches("\\w+(\\s)*:(\\s)*.+")) {
                 String[] partsOfMessage = input.trim().split("\\s*:\\s*", 2);
-                boolean isMessageSend = service.addMessage(new User(partsOfMessage[0]), partsOfMessage[1]);
-                if (isMessageSend) System.out.println("The message created successfully");
-                else System.out.println("Too frequent requests");
+                try {
+                    service.addMessage(new User(partsOfMessage[0]), partsOfMessage[1]);
+                    System.out.println("The message created successfully");
+                } catch (CountOfMessagesExceededException exception) {
+                    System.out.println("Too frequent requests. Try again through " + exception.getLimitedTime().getSeconds() + "s");
+                }
             } else if (input.equalsIgnoreCase("Exit")) System.exit(0);
               else System.out.println("Enter a correct command.");
         }
