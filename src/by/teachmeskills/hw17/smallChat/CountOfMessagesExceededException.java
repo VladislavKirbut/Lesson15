@@ -1,17 +1,17 @@
 package by.teachmeskills.hw17.smallChat;
-import java.time.Duration;
+import java.time.Instant;
 
 public class CountOfMessagesExceededException extends Exception {
     /**
      * limitedTime - time after which you can send messages
      */
-    private final Duration limitedTime;
+    private final Instant limitedTime;
 
-    public CountOfMessagesExceededException(Duration limitedTime) {
+    public CountOfMessagesExceededException(Instant limitedTime) {
         this.limitedTime = limitedTime;
     }
 
-    public Duration getLimitedTime() {
+    public Instant getLimitedTime() {
         return limitedTime;
     }
 }

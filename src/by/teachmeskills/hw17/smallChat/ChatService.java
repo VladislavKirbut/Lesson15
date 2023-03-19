@@ -48,7 +48,7 @@ public class ChatService {
                     return true;
 
                 if (countOfMessage == this.countOfMessage)
-                    throw new CountOfMessagesExceededException(Duration.between(start, messageList[i].getCreatedInstant()));
+                    throw new CountOfMessagesExceededException(messageList[i].getCreatedInstant().plus(timeInterval));
             }
         }
 

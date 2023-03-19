@@ -5,6 +5,7 @@ import by.teachmeskills.hw17.smallChat.CountOfMessagesExceededException;
 import by.teachmeskills.hw17.smallChat.Message;
 import by.teachmeskills.hw17.smallChat.User;
 
+import java.time.Instant;
 import java.util.Scanner;
 import java.time.Duration;
 
@@ -30,7 +31,8 @@ public class Chat {
                     service.addMessage(new User(partsOfMessage[0]), partsOfMessage[1]);
                     System.out.println("The message created successfully");
                 } catch (CountOfMessagesExceededException exception) {
-                    System.out.println("Too frequent requests. Try again through " + exception.getLimitedTime().getSeconds() + "s");
+                    System.out.println("Too frequent requests. Try again through " +
+                            Duration.between(Instant.now(),exception.getLimitedTime()).toSeconds() + "s");
                 }
             } else if (input.equalsIgnoreCase("Exit")) System.exit(0);
               else System.out.println("Enter a correct command.");
