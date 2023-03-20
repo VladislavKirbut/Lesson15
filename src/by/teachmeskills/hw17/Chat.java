@@ -6,13 +6,15 @@ import by.teachmeskills.hw17.smallChat.Message;
 import by.teachmeskills.hw17.smallChat.User;
 
 import java.time.Instant;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.time.Duration;
+import java.util.List;
 
 public class Chat {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ChatService service = new ChatService(Duration.ofSeconds(30), 2);
+        ChatService service = new ChatService(Duration.ofSeconds(30), 3);
         while (true) {
             System.out.println("""
                     Enter a string in the format:
@@ -23,7 +25,7 @@ public class Chat {
             String input = scanner.nextLine();
 
             if (input.equalsIgnoreCase("Story")) {
-                Message[] messageList = service.getMessageList();
+                List<Message> messageList = service.getMessageList();
                 printAll(messageList);
             } else if (input.matches("\\w+(\\s)*:(\\s)*.+")) {
                 String[] partsOfMessage = input.trim().split("\\s*:\\s*", 2);
@@ -32,16 +34,17 @@ public class Chat {
                     System.out.println("The message created successfully");
                 } catch (CountOfMessagesExceededException exception) {
                     System.out.println("Too frequent requests. Try again through " +
-                            Duration.between(Instant.now(),exception.getLimitedTime()).toSeconds() + "s");
+                            Duration.between(Instant.now(), exception.getLimitedTime()).toSeconds() + "s");
                 }
             } else if (input.equalsIgnoreCase("Exit")) System.exit(0);
               else System.out.println("Enter a correct command.");
         }
     }
 
-    public static void printAll(Message[] messageList) {
-        for (int i = 0; i < messageList.length; i++) {
-            System.out.println(messageList[i].toString());
+    public static void printAll(List<Message> messageList) {
+        Iterator<Message> iterator = messageList.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
         }
     }
 }
